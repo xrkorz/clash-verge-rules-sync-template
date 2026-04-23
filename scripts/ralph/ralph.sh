@@ -114,7 +114,7 @@ while true; do
     OUTPUT=$(claude --dangerously-skip-permissions --print < "$SCRIPT_DIR/CLAUDE.md" 2>&1 | tee /dev/stderr) || true
   else
     rm -f "$CODEX_WORKDIR_LINK"
-    ln -s "$PROJECT_ROOT" "$CODEX_WORKDIR_LINK"
+    ln -s "$SCRIPT_DIR" "$CODEX_WORKDIR_LINK"
     OUTPUT=$(env -u CODEX_API_KEY -u OPENAI_API_KEY codex exec \
       -c "model_provider=\"$CODEX_PROVIDER\"" \
       -c "model_providers.$CODEX_PROVIDER.base_url=\"$CODEX_BASE_URL\"" \

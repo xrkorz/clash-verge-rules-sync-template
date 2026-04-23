@@ -2,9 +2,9 @@
 
 任务要求：
 
-1. 读取同目录下的 `prd.json`
-2. 读取同目录下的 `progress.txt`，优先看顶部 `Codebase Patterns`
-3. 检查当前 git 分支是否与 `prd.json` 的 `branchName` 一致；如果不一致，从 `main` 创建或切换到该分支
+1. 当前工作目录就是 `scripts/ralph/`；先读取这里的 `prd.json`
+2. 读取这里的 `progress.txt`，优先看顶部 `Codebase Patterns`
+3. 仓库根目录在当前目录的上两级（`../..`）；检查当前 git 分支是否与 `prd.json` 的 `branchName` 一致；如果不一致，从 `main` 创建或切换到该分支
 4. 选择 `passes: false` 且 `priority` 最小的那个 user story
 5. 只实现这一条 story
 6. 运行项目所需质量检查，例如 typecheck、lint、test；如果项目没有正式 typecheck 工具，至少做可解析性/配置有效性校验，并在进展中说明
@@ -34,7 +34,7 @@
 - 必须遵循当前项目中的 `AGENTS.md`
 - 如需更新 UI，且本环境有浏览器工具，则做浏览器验证；没有的话在进展里明确写需要人工验证
 - 当前项目是 Clash Verge 规则聚合模板，`rules/` 中的同步文件属于上游产物，不要手工维护生成内容
-- 当前项目的核心文件通常位于 `README.md`、`.github/workflows/`、`config/`、`scripts/ralph/`
+- 当前项目的核心文件通常位于仓库根目录下的 `README.md`、`.github/workflows/`、`config/`，以及当前目录 `scripts/ralph/`
 
 停止条件：
 
