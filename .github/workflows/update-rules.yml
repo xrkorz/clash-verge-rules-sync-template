@@ -20,6 +20,7 @@ jobs:
 
       - name: Download clash-rules
         run: |
+          # Keep the six base rules as upstream originals; download them unchanged into rules/.
           curl -L --fail -o rules/private.txt https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/private.txt
           curl -L --fail -o rules/reject.txt https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/reject.txt
           curl -L --fail -o rules/direct.txt https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/direct.txt

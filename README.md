@@ -18,6 +18,8 @@
 - `lancidr.txt`
 - `cncidr.txt`
 
+以上 6 个基础规则会由 workflow 原样下载到 `rules/` 目录，不做解析、合并、重写或筛选。
+
 ### blackmatrix7/ios_rule_script (`release`, Clash)
 - `OpenAI.yaml`
 - `Anthropic.yaml`
