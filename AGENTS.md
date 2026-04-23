@@ -7,3 +7,4 @@
 - 新增或调整专项服务规则时，要同时保持 `README.md` 的规则清单说明、workflow 中的下载 URL，以及 `tests/` 下对应 story 校验脚本三者同步。
 - 涉及 GitHub Actions 行为的 story，应同步维护 workflow 实现、README 行为说明，以及 `tests/` 下对应 story 校验脚本，避免触发方式、权限与提交逻辑说明漂移。
 - 涉及配置示例接入的 story，应同步维护 `config/` 示例文件、README 配置说明，以及 `tests/` 下对应 story 校验脚本，避免占位 URL、behavior 语义与规则顺序示例漂移。
+- 涉及多设备统一规则源的 story，应同步维护 README 更新链说明、示例配置中的统一仓库 URL 前缀，以及 `tests/` 下对应 story 校验脚本，避免客户端重新分散引用上游地址。

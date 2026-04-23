@@ -93,6 +93,13 @@
 - `behavior: classical` 对应原始 YAML 规则（如 `OpenAI.yaml`、`Telegram.yaml`、`Advertising.yaml`）。
 - `rules` 顺序示例会先拦截广告与隐私类规则，再匹配 AI / 流媒体专项规则，最后回落到基础直连 / 代理 / GEOIP / MATCH。
 
+## 多设备统一规则源
+
+- 所有设备都应指向同一组来自你自己仓库的规则 URL；不要在手机、平板、电脑上分别改成不同的上游地址。
+- 推荐链路固定为：上游规则仓库 → 你的 GitHub 仓库 → Clash Verge 客户端。这样每台设备看到的都是同一份 `rules/` 同步结果。
+- 只要你的个人仓库持续同步，所有设备都会通过相同 URL 获取更新；不需要在每台设备上分别保存上游原始规则文件。
+- 也不需要在每台设备上各自运行同步脚本；同步动作只发生在 GitHub Actions，客户端只负责消费你仓库里的统一规则源。
+
 ## 自动更新说明
 
 - 该 workflow 支持手动触发与每日定时同步：既可以在 GitHub Actions 页面手动运行 `Update Rules`，也会按默认 cron 每天自动执行一次。
