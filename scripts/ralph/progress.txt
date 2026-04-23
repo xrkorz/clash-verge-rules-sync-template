@@ -3,6 +3,7 @@ Started: 2026-04-23
 ---
 
 ## Codebase Patterns
+- 涉及 GitHub Actions 行为的 story 时，也应同步维护 workflow 实现、README 行为说明与 `tests/` 下的 story 校验脚本，避免自动化约束漂移。
 - 新增或调整专项服务规则时，应同步维护 README 说明、workflow 下载 URL 与 `tests/` 下的 story 校验脚本，避免文档与实现漂移。
 - README / workflow / AGENTS.md 应同步强调“原样下载、不做二次处理”，避免后续迭代引入复杂生成逻辑。
 - 仓库初始化时用 `rules/.gitkeep` 保留空目录，并在 README 中明确说明该目录只是首次同步前的占位。
@@ -35,5 +36,15 @@ Started: 2026-04-23
 - **Learnings for future iterations:**
   - 专项服务规则的可追溯性除了 workflow URL，还应在 README 里明确来源路径模式与“原样 YAML”约束。
   - 本仓库没有正式 typecheck；可继续用 Python story 校验 + Ruby YAML 可解析性校验作为最小质量门。
+  - 本轮没有 UI 变更，也没有浏览器验证需求。
+---
+
+## 2026-04-23 20:45 - US-004
+- 完成了什么：为 workflow 自动同步/自动提交补齐仓库内显式说明，并新增回归校验脚本锁定手动触发、每日定时、最小权限、仅有变更时提交与空提交保护。
+- 修改了哪些文件：`README.md`、`AGENTS.md`、`tests/test_us004_workflow_automation.py`、`scripts/ralph/prd.json`。
+- **Learnings for future iterations:**
+  - 涉及 GitHub Actions 行为的 story，也应同步维护 workflow 实现、README 行为说明与 `tests/` 下的 story 校验脚本。
+  - 当 workflow 已具备行为但仓库内约束不显式时，可优先补文档与回归测试，而不是改动已有同步逻辑。
+  - 本仓库没有正式 typecheck；本轮继续使用 Python story 校验 + Ruby YAML 可解析性校验作为最小质量门。
   - 本轮没有 UI 变更，也没有浏览器验证需求。
 ---

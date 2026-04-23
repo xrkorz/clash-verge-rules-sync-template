@@ -85,8 +85,11 @@
 
 ## 自动更新说明
 
-- GitHub Actions 默认每天运行一次
-- Clash Verge 本地 `rule-providers.interval` 默认也是 `86400`
+- 该 workflow 支持手动触发与每日定时同步：既可以在 GitHub Actions 页面手动运行 `Update Rules`，也会按默认 cron 每天自动执行一次。
+- workflow 仅申请 `contents: write` 权限，用于把同步后的 `rules/` 变更提交回仓库。
+- 只有 `rules/` 有变更时才会自动提交并推送。
+- 没有变更时会直接退出，不会创建空提交。
+- Clash Verge 本地 `rule-providers.interval` 默认也是 `86400`。
 - 两层更新链路：
   - GitHub Actions：把上游规则同步到你的仓库
   - Clash Verge：从你的仓库自动拉取最新规则
