@@ -32,9 +32,31 @@
 
 ```text
 .
+├─ README.md
 ├─ .github/workflows/update-rules.yml
 ├─ config/clash-verge-rules.example.yaml
-└─ rules/
+└─ rules/.gitkeep
+```
+
+- `README.md`：记录同步来源、初始化步骤和后续维护方式。
+- `.github/workflows/update-rules.yml`：负责定时拉取上游规则并写入 `rules/`。
+- `config/clash-verge-rules.example.yaml`：提供 Clash Verge / Mihomo 的接入示例。
+- `rules/.gitkeep`：仅用于保留空目录；首次运行 workflow 后会被真实同步文件填充。
+
+## 维护方式
+
+- 这个模板只负责“原样同步上游规则 + 提供配置引用示例”，不承担规则合并、改写或复杂生成职责。
+- 日常维护优先修改 workflow 中的 URL 列表与 README 文档，不手工编辑 `rules/` 下的同步结果。
+- 新仓库初始化只需保留这套目录结构并运行一次 Actions，同步后的 `rules/` 就能作为统一规则源供 Clash Verge 使用。
+
+## 初始化检查清单
+
+```text
+1. 创建自己的 GitHub 仓库
+2. 推送本模板到默认分支
+3. 手动运行 Update Rules workflow
+4. 确认 rules/ 目录出现同步文件
+5. 按自己的仓库地址替换示例配置中的占位符
 ```
 
 ## 使用步骤

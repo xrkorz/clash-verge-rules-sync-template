@@ -3,6 +3,17 @@ Started: 2026-04-23
 ---
 
 ## Codebase Patterns
+- 仓库初始化时用 `rules/.gitkeep` 保留空目录，并在 README 中明确说明该目录只是首次同步前的占位。
 - 该仓库是 Clash Verge 规则聚合模板，核心产物是 README、GitHub Actions workflow、示例配置与同步后的 rules 文件。
 - `rules/` 中的同步文件应视为上游产物，不应手工编辑；变更应优先通过 `scripts/ralph/prd.json` 或 workflow URL 列表驱动。
 - workflow 只做原样下载与提交，不引入规则合并、重写或复杂生成逻辑。
+
+
+## 2026-04-23 19:20 - US-001
+- 完成了最小规则聚合仓库模板文档补强：在 `README.md` 中补充仓库结构、`rules/.gitkeep` 占位说明、维护方式与初始化检查清单。
+- 修改了哪些文件：`README.md`、`scripts/ralph/prd.json`、`scripts/ralph/progress.txt`。
+- **Learnings for future iterations:**
+  - README 需要把 `README.md`、workflow、示例配置和 `rules/.gitkeep` 的职责写清楚，避免模板初始化时对空目录用途产生歧义。
+  - 本仓库没有独立 typecheck；可用 Ruby `YAML.load_file` 对 workflow 与示例配置做可解析性校验。
+  - 本轮没有 UI 变更，也没有浏览器验证需求。
+---
