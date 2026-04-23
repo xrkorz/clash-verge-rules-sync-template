@@ -1,12 +1,11 @@
 #!/bin/bash
 # Ralph Wiggum - Long-running AI agent loop
-# Usage: ./ralph.sh [--tool amp|claude] [max_iterations]
+# Usage: ./ralph.sh [--tool amp|claude|codex] [max_iterations]
 
 set -e
 
-# Parse arguments
-TOOL="amp"  # Default to amp for backwards compatibility
-MAX_ITERATIONS=10
+TOOL="codex"
+MAX_ITERATIONS=""
 
 while [[ $# -gt 0 ]]; do
   case $1 in
@@ -19,7 +18,6 @@ while [[ $# -gt 0 ]]; do
       shift
       ;;
     *)
-      # Assume it's max_iterations if it's a number
       if [[ "$1" =~ ^[0-9]+$ ]]; then
         MAX_ITERATIONS="$1"
       fi
@@ -28,43 +26,44 @@ while [[ $# -gt 0 ]]; do
   esac
 done
 
-# Validate tool choice
-if [[ "$TOOL" != "amp" && "$TOOL" != "claude" ]]; then
-  echo "Error: Invalid tool '$TOOL'. Must be 'amp' or 'claude'."
+if [[ "$TOOL" != "amp" && "$TOOL" != "claude" && "$TOOL" != "codex" ]]; then
+  echo "Error: Invalid tool '$TOOL'. Must be 'amp', 'claude', or 'codex'."
   exit 1
 fi
+
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
+PROJECT_ROOT="$(cd "$SCRIPT_DIR/../.." && pwd)"
+PROJECT_SLUG="clash-verge-rules-sync-template"
+CODEX_WORKDIR_LINK="${TMPDIR:-/tmp}ralph-${PROJECT_SLUG}-workdir"
+CODEX_PROVIDER="custom"
+CODEX_BASE_URL="${CODEX_BASE_URL:-http://127.0.0.1:8327/v1}"
 PRD_FILE="$SCRIPT_DIR/prd.json"
 PROGRESS_FILE="$SCRIPT_DIR/progress.txt"
 ARCHIVE_DIR="$SCRIPT_DIR/archive"
 LAST_BRANCH_FILE="$SCRIPT_DIR/.last-branch"
+LAST_MESSAGE_FILE="$SCRIPT_DIR/.last-message.txt"
 
-# Archive previous run if branch changed
 if [ -f "$PRD_FILE" ] && [ -f "$LAST_BRANCH_FILE" ]; then
   CURRENT_BRANCH=$(jq -r '.branchName // empty' "$PRD_FILE" 2>/dev/null || echo "")
   LAST_BRANCH=$(cat "$LAST_BRANCH_FILE" 2>/dev/null || echo "")
-  
+
   if [ -n "$CURRENT_BRANCH" ] && [ -n "$LAST_BRANCH" ] && [ "$CURRENT_BRANCH" != "$LAST_BRANCH" ]; then
-    # Archive the previous run
     DATE=$(date +%Y-%m-%d)
-    # Strip "ralph/" prefix from branch name for folder
     FOLDER_NAME=$(echo "$LAST_BRANCH" | sed 's|^ralph/||')
     ARCHIVE_FOLDER="$ARCHIVE_DIR/$DATE-$FOLDER_NAME"
-    
+
     echo "Archiving previous run: $LAST_BRANCH"
     mkdir -p "$ARCHIVE_FOLDER"
     [ -f "$PRD_FILE" ] && cp "$PRD_FILE" "$ARCHIVE_FOLDER/"
     [ -f "$PROGRESS_FILE" ] && cp "$PROGRESS_FILE" "$ARCHIVE_FOLDER/"
     echo "   Archived to: $ARCHIVE_FOLDER"
-    
-    # Reset progress file for new run
+
     echo "# Ralph Progress Log" > "$PROGRESS_FILE"
     echo "Started: $(date)" >> "$PROGRESS_FILE"
     echo "---" >> "$PROGRESS_FILE"
   fi
 fi
 
-# Track current branch
 if [ -f "$PRD_FILE" ]; then
   CURRENT_BRANCH=$(jq -r '.branchName // empty' "$PRD_FILE" 2>/dev/null || echo "")
   if [ -n "$CURRENT_BRANCH" ]; then
@@ -72,39 +71,74 @@ if [ -f "$PRD_FILE" ]; then
   fi
 fi
 
-# Initialize progress file if it doesn't exist
 if [ ! -f "$PROGRESS_FILE" ]; then
   echo "# Ralph Progress Log" > "$PROGRESS_FILE"
   echo "Started: $(date)" >> "$PROGRESS_FILE"
   echo "---" >> "$PROGRESS_FILE"
 fi
 
-echo "Starting Ralph - Tool: $TOOL - Max iterations: $MAX_ITERATIONS"
+if [[ -n "$MAX_ITERATIONS" ]]; then
+  echo "Starting Ralph - Tool: $TOOL - Max iterations: $MAX_ITERATIONS"
+else
+  echo "Starting Ralph - Tool: $TOOL - Max iterations: unlimited"
+fi
 
-for i in $(seq 1 $MAX_ITERATIONS); do
+if [[ "$TOOL" == "codex" ]]; then
+  if ! command -v curl >/dev/null 2>&1; then
+    echo "Error: 'curl' is required for codex provider health check."
+    exit 2
+  fi
+
+  if ! curl -fsS --max-time 3 "${CODEX_BASE_URL%/}/models" >/dev/null 2>&1; then
+    echo "Error: codex custom provider is unreachable: $CODEX_BASE_URL"
+    echo "Please ensure your local proxy is running before starting Ralph."
+    exit 2
+  fi
+fi
+
+i=1
+while true; do
   echo ""
   echo "==============================================================="
-  echo "  Ralph Iteration $i of $MAX_ITERATIONS ($TOOL)"
+  if [[ -n "$MAX_ITERATIONS" ]]; then
+    echo "  Ralph Iteration $i of $MAX_ITERATIONS ($TOOL)"
+  else
+    echo "  Ralph Iteration $i ($TOOL)"
+  fi
   echo "==============================================================="
+  rm -f "$LAST_MESSAGE_FILE"
 
-  # Run the selected tool with the ralph prompt
   if [[ "$TOOL" == "amp" ]]; then
     OUTPUT=$(cat "$SCRIPT_DIR/prompt.md" | amp --dangerously-allow-all 2>&1 | tee /dev/stderr) || true
-  else
-    # Claude Code: use --dangerously-skip-permissions for autonomous operation, --print for output
+  elif [[ "$TOOL" == "claude" ]]; then
     OUTPUT=$(claude --dangerously-skip-permissions --print < "$SCRIPT_DIR/CLAUDE.md" 2>&1 | tee /dev/stderr) || true
+  else
+    rm -f "$CODEX_WORKDIR_LINK"
+    ln -s "$PROJECT_ROOT" "$CODEX_WORKDIR_LINK"
+    OUTPUT=$(env -u CODEX_API_KEY -u OPENAI_API_KEY codex exec \
+      -c "model_provider=\"$CODEX_PROVIDER\"" \
+      -c "model_providers.$CODEX_PROVIDER.base_url=\"$CODEX_BASE_URL\"" \
+      --dangerously-bypass-approvals-and-sandbox \
+      -C "$CODEX_WORKDIR_LINK" \
+      -o "$LAST_MESSAGE_FILE" \
+      - < "$SCRIPT_DIR/CODEX.md" 2>&1 | tee /dev/stderr) || true
   fi
-  
-  # Check for completion signal
-  if echo "$OUTPUT" | grep -q "<promise>COMPLETE</promise>"; then
+
+  if [[ -f "$LAST_MESSAGE_FILE" ]] && grep -qx '<promise>COMPLETE</promise>' "$LAST_MESSAGE_FILE"; then
     echo ""
     echo "Ralph completed all tasks!"
-    echo "Completed at iteration $i of $MAX_ITERATIONS"
+    echo "Completed at iteration $i"
     exit 0
   fi
-  
+
   echo "Iteration $i complete. Continuing..."
   sleep 2
+
+  if [[ -n "$MAX_ITERATIONS" && "$i" -ge "$MAX_ITERATIONS" ]]; then
+    break
+  fi
+
+  i=$((i + 1))
 done
 
 echo ""
