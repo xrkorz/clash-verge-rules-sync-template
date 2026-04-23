@@ -24,3 +24,13 @@
 
 ## Errors Encountered
 - 暂无
+
+
+### Phase 12: Ralph 单 Story 实现迭代（US-003）
+- [x] 核对目标 story、分支与仓库边界
+- [x] 先写最小失败校验覆盖专项服务规则说明缺口
+- [x] 以最小改动补齐专项服务规则文档/注释
+- [x] 运行 YAML 与 story 校验并记录结果
+- [x] 回写 `scripts/ralph/prd.json` / `scripts/ralph/progress.txt`
+- [x] 提交最小化变更
+- **Status:** complete

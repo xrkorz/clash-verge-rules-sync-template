@@ -3,6 +3,7 @@ Started: 2026-04-23
 ---
 
 ## Codebase Patterns
+- 新增或调整专项服务规则时，应同步维护 README 说明、workflow 下载 URL 与 `tests/` 下的 story 校验脚本，避免文档与实现漂移。
 - README / workflow / AGENTS.md 应同步强调“原样下载、不做二次处理”，避免后续迭代引入复杂生成逻辑。
 - 仓库初始化时用 `rules/.gitkeep` 保留空目录，并在 README 中明确说明该目录只是首次同步前的占位。
 - 该仓库是 Clash Verge 规则聚合模板，核心产物是 README、GitHub Actions workflow、示例配置与同步后的 rules 文件。
@@ -25,5 +26,14 @@ Started: 2026-04-23
 - **Learnings for future iterations:**
   - 基础规则与专项规则都应把“原样同步、不做加工”写进仓库内文档/注释，避免后续迭代误引入生成逻辑。
   - 本仓库没有正式 typecheck；可用 Ruby `YAML.load_file` 作为 workflow 与 Mihomo 示例配置的可解析性校验。
+  - 本轮没有 UI 变更，也没有浏览器验证需求。
+---
+
+## 2026-04-23 20:28 - US-003
+- 完成了什么：补充专项服务规则说明小节，并在 workflow 中明确 8 个 `ios_rule_script` Clash YAML 会原样下载到 `rules/`；同时新增回归校验脚本锁定这组规则与说明。
+- 修改了哪些文件：`README.md`、`.github/workflows/update-rules.yml`、`AGENTS.md`、`tests/test_us003_service_rules.py`、`scripts/ralph/prd.json`。
+- **Learnings for future iterations:**
+  - 专项服务规则的可追溯性除了 workflow URL，还应在 README 里明确来源路径模式与“原样 YAML”约束。
+  - 本仓库没有正式 typecheck；可继续用 Python story 校验 + Ruby YAML 可解析性校验作为最小质量门。
   - 本轮没有 UI 变更，也没有浏览器验证需求。
 ---

@@ -30,6 +30,11 @@
 - `Disney.yaml`
 - `Advertising.yaml`
 
+### 专项服务规则（blackmatrix7/ios_rule_script）
+- workflow 会直接从 `blackmatrix7/ios_rule_script` 的 `release/rule/Clash/<Rule>/<Rule>.yaml` 下载以上 8 个专项服务规则。
+- 这些规则会以原始 YAML 文件形式原样保存到 `rules/` 目录，不做 YAML 解析、重写、合并、过滤或其他二次处理。
+- 具体 URL 可直接从 `.github/workflows/update-rules.yml` 的下载步骤追溯。
+
 ## 仓库结构
 
 ```text

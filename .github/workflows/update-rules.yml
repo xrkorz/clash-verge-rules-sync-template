@@ -30,6 +30,7 @@ jobs:
 
       - name: Download ios_rule_script
         run: |
+          # Keep the eight service-specific Clash YAML rules as upstream originals; download them unchanged into rules/.
           curl -L --fail -o rules/OpenAI.yaml https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/OpenAI/OpenAI.yaml
           curl -L --fail -o rules/Anthropic.yaml https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Anthropic/Anthropic.yaml
           curl -L --fail -o rules/Claude.yaml https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Claude/Claude.yaml
