@@ -110,8 +110,8 @@
         "Typecheck passes"
       ],
       "priority": 7,
-      "passes": false,
-      "notes": ""
+      "passes": true,
+      "notes": "保持轻量同步模板定位；新增、删除或切换规则源时只改 workflow URL 与 README，不扩展为复杂规则生成系统。"
     }
   ]
 }

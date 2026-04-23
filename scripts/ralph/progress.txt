@@ -3,6 +3,7 @@ Started: 2026-04-23
 ---
 
 ## Codebase Patterns
+- 涉及低维护成本的 story，应同步维护 README 维护边界说明、`AGENTS.md` 复用规则、`tests/` 对应校验脚本，以及 PRD notes 中“禁止复杂生成系统”的约束。
 - 涉及“多设备统一规则源”的 story，应同步维护 README 的更新链说明、配置示例中的统一仓库 URL 前缀，以及 `tests/` 下对应校验脚本，确保所有客户端持续消费同一组仓库地址。
 - 涉及配置示例接入的 story，应同步维护 `config/` 示例文件、README 配置说明，以及 `tests/` 下对应 story 校验脚本，避免占位 URL、behavior 语义与规则顺序示例漂移。
 - 涉及 GitHub Actions 行为的 story 时，也应同步维护 workflow 实现、README 行为说明与 `tests/` 下的 story 校验脚本，避免自动化约束漂移。
@@ -65,6 +66,16 @@ Started: 2026-04-23
 - 修改了哪些文件：`README.md`、`AGENTS.md`、`tests/test_us006_shared_rule_source.py`、`scripts/ralph/prd.json`。
 - **Learnings for future iterations:**
   - 多设备类 story 的核心不是新增同步逻辑，而是把“统一 URL 源 + 单点同步链路 + 客户端仅消费结果”写清楚并锁进回归测试。
+  - 本仓库没有正式 typecheck；本轮继续使用 Python story 校验 + Ruby YAML 可解析性校验作为最小质量门。
+  - 本轮没有 UI 变更，也没有浏览器验证需求。
+---
+
+## 2026-04-23 21:10 CST - US-007
+- 完成了什么：补充“低维护成本约束”说明，明确新增/删除/切换规则源只需修改 workflow URL 与 README 文档，不引入额外生成链路；同时新增 US-007 回归校验脚本并在 PRD notes 中禁止扩展为复杂规则生成系统。
+- 修改了哪些文件：`README.md`、`AGENTS.md`、`tests/test_us007_low_maintenance.py`、`scripts/ralph/prd.json`、`../prd.json`。
+- **Learnings for future iterations:**
+  - 涉及低维护成本的 story，应同步维护 README 维护边界说明、`AGENTS.md` 复用规则、`tests/` 对应校验脚本，以及 PRD notes 中“禁止复杂生成系统”的约束。
+  - 对这类配置模板仓库，若已有静态 URL 下载结构，通常只需补足文档与测试，不要为了“可扩展”额外引入生成脚本。
   - 本仓库没有正式 typecheck；本轮继续使用 Python story 校验 + Ruby YAML 可解析性校验作为最小质量门。
   - 本轮没有 UI 变更，也没有浏览器验证需求。
 ---
