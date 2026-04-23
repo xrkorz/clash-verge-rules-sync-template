@@ -1,4 +1,9 @@
+# 仅适用于 Clash Verge / Mihomo
+# 所有 URL 都需要替换为你自己的 GitHub 仓库地址。
+# 该示例默认主配置里已经存在 PROXY 代理组。
+
 rule-providers:
+  # domain: 域名类文本规则；ipcidr: IP CIDR 文本规则；classical: 原始 YAML 规则。
   private:
     type: http
     behavior: domain
@@ -98,6 +103,7 @@ rule-providers:
     interval: 86400
 
 rules:
+  # 先拦截广告与隐私类规则，再匹配 AI / 流媒体专项规则，最后回落到基础直连 / 代理 / GEOIP / MATCH。
   - RULE-SET,private,DIRECT
   - RULE-SET,reject,REJECT
   - RULE-SET,Advertising,REJECT

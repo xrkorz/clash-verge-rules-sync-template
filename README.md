@@ -83,6 +83,16 @@
 - 本模板中的 `rule-providers` / `rules` 可直接用于 Clash Verge
 - 你需要保证主配置中存在 `PROXY` 代理组；如需分流更细，可以改成你自己的组名
 
+## 配置示例说明
+
+- `config/clash-verge-rules.example.yaml` 仅适用于 Clash Verge / Mihomo。
+- 所有 URL 都使用你自己的 GitHub 仓库占位符；接入前请统一替换 `你的用户名` 与 `你的仓库名`。
+- 示例默认假设主配置里已经存在 `PROXY` 代理组；如果你的组名不同，请同步替换 `rules` 段中的目标策略组。
+- `behavior: domain` 对应域名类文本规则（`private.txt`、`reject.txt`、`direct.txt`、`proxy.txt`）。
+- `behavior: ipcidr` 对应 IP CIDR 文本规则（`lancidr.txt`、`cncidr.txt`）。
+- `behavior: classical` 对应原始 YAML 规则（如 `OpenAI.yaml`、`Telegram.yaml`、`Advertising.yaml`）。
+- `rules` 顺序示例会先拦截广告与隐私类规则，再匹配 AI / 流媒体专项规则，最后回落到基础直连 / 代理 / GEOIP / MATCH。
+
 ## 自动更新说明
 
 - 该 workflow 支持手动触发与每日定时同步：既可以在 GitHub Actions 页面手动运行 `Update Rules`，也会按默认 cron 每天自动执行一次。

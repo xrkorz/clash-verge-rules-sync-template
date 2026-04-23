@@ -3,6 +3,7 @@ Started: 2026-04-23
 ---
 
 ## Codebase Patterns
+- 涉及配置示例接入的 story，应同步维护 `config/` 示例文件、README 配置说明，以及 `tests/` 下对应 story 校验脚本，避免占位 URL、behavior 语义与规则顺序示例漂移。
 - 涉及 GitHub Actions 行为的 story 时，也应同步维护 workflow 实现、README 行为说明与 `tests/` 下的 story 校验脚本，避免自动化约束漂移。
 - 新增或调整专项服务规则时，应同步维护 README 说明、workflow 下载 URL 与 `tests/` 下的 story 校验脚本，避免文档与实现漂移。
 - README / workflow / AGENTS.md 应同步强调“原样下载、不做二次处理”，避免后续迭代引入复杂生成逻辑。
@@ -45,6 +46,15 @@ Started: 2026-04-23
 - **Learnings for future iterations:**
   - 涉及 GitHub Actions 行为的 story，也应同步维护 workflow 实现、README 行为说明与 `tests/` 下的 story 校验脚本。
   - 当 workflow 已具备行为但仓库内约束不显式时，可优先补文档与回归测试，而不是改动已有同步逻辑。
+  - 本仓库没有正式 typecheck；本轮继续使用 Python story 校验 + Ruby YAML 可解析性校验作为最小质量门。
+  - 本轮没有 UI 变更，也没有浏览器验证需求。
+---
+
+## 2026-04-23 20:47 - US-005
+- 完成了什么：补充 Clash Verge / Mihomo 配置示例说明，明确占位 URL、PROXY 前置假设、behavior 与文件格式映射、rules 顺序意图，并新增 US-005 回归校验脚本。
+- 修改了哪些文件：`README.md`、`config/clash-verge-rules.example.yaml`、`tests/test_us005_config_example.py`、`AGENTS.md`、`prd.json`。
+- **Learnings for future iterations:**
+  - 涉及配置示例接入的 story，应同步维护 `config/` 示例文件、README 配置说明，以及 `tests/` 下对应 story 校验脚本，避免占位 URL、behavior 语义与规则顺序示例漂移。
   - 本仓库没有正式 typecheck；本轮继续使用 Python story 校验 + Ruby YAML 可解析性校验作为最小质量门。
   - 本轮没有 UI 变更，也没有浏览器验证需求。
 ---
