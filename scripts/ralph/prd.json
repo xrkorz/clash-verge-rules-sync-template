@@ -1,0 +1,117 @@
+{
+  "project": "Clash Verge Rules Sync Solution",
+  "branchName": "ralph/clash-verge-rules-sync-solution",
+  "description": "Create a lightweight Clash Verge rules sync solution with a personal GitHub repository, GitHub Actions auto-sync workflow, and a Mihomo-compatible configuration example that stays updated from upstream sources.",
+  "userStories": [
+    {
+      "id": "US-001",
+      "title": "创建最小规则聚合仓库模板",
+      "description": "As a Clash Verge user, I want a minimal GitHub repository template so that I can quickly create my own rules sync repository without designing the structure from scratch.",
+      "acceptanceCriteria": [
+        "Provide a clear repository structure description",
+        "Repository includes README.md, .github/workflows/update-rules.yml, config/clash-verge-rules.example.yaml, and a rules/ placeholder directory",
+        "README explains sync sources, setup steps, and maintenance approach",
+        "File paths and naming stay consistent across the document",
+        "Typecheck passes"
+      ],
+      "priority": 1,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-002",
+      "title": "自动同步上游基础规则",
+      "description": "As a Clash Verge user, I want the repository to automatically sync core base rules so that I do not have to manually download and update common direct, proxy, and blocking rules.",
+      "acceptanceCriteria": [
+        "Workflow syncs private, reject, direct, proxy, lancidr, and cncidr",
+        "Sync source is Loyalsoldier/clash-rules release branch",
+        "Each file is downloaded and saved unchanged into the rules/ directory",
+        "GitHub Actions job fails when any download fails",
+        "No secondary processing is applied to these base rules",
+        "Typecheck passes"
+      ],
+      "priority": 2,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-003",
+      "title": "自动同步专项服务规则",
+      "description": "As a Clash Verge user who needs fine-grained routing, I want the repository to sync a small set of service-specific rules so that I can control key services while keeping the setup lightweight.",
+      "acceptanceCriteria": [
+        "Workflow syncs OpenAI, Anthropic, Claude, Copilot, Telegram, Netflix, Disney, and Advertising",
+        "Sync source is blackmatrix7/ios_rule_script release branch under rule/Clash",
+        "Rules are stored as original YAML files in the rules/ directory",
+        "All service rule URLs are documented or directly traceable from the workflow",
+        "No YAML parsing, rewriting, merging, or filtering is applied",
+        "Typecheck passes"
+      ],
+      "priority": 3,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-004",
+      "title": "定时同步并自动提交变更",
+      "description": "As a repository maintainer, I want GitHub Actions to sync and commit rule updates on a schedule so that the repository stays current without manual intervention.",
+      "acceptanceCriteria": [
+        "Workflow supports both manual trigger and scheduled trigger",
+        "Workflow runs at least once per day by default",
+        "When files in rules/ change, the workflow commits and pushes updates automatically",
+        "When nothing changes, the workflow exits without creating an empty commit",
+        "Workflow only requires contents: write permission",
+        "Typecheck passes"
+      ],
+      "priority": 4,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-005",
+      "title": "提供 Clash Verge 可直接接入的配置示例",
+      "description": "As a Clash Verge user, I want a configuration example that points to my own repository so that I can quickly consume the synced rule files.",
+      "acceptanceCriteria": [
+        "Provide a rule-providers configuration example",
+        "Provide a matching rules ordering example",
+        "All URLs use placeholders for the user's own GitHub repository",
+        "Behavior types are explicitly set and match the file formats",
+        "Configuration clearly assumes an existing PROXY group",
+        "Configuration is documented as Clash Verge / Mihomo only",
+        "Typecheck passes"
+      ],
+      "priority": 5,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-006",
+      "title": "支持多设备统一使用同一规则源",
+      "description": "As a user with multiple devices, I want every device to point to the same repository URLs so that I do not have to maintain rule sources separately per device.",
+      "acceptanceCriteria": [
+        "PRD requires all devices to use the same set of URLs from the user's repository",
+        "Documentation explains the update chain as upstream repositories to personal repository to Clash Verge clients",
+        "The solution does not require storing upstream raw files separately on each client",
+        "The solution does not require running sync scripts on each device",
+        "Typecheck passes"
+      ],
+      "priority": 6,
+      "passes": false,
+      "notes": ""
+    },
+    {
+      "id": "US-007",
+      "title": "降低后续维护成本",
+      "description": "As a maintainer, I want adding, removing, or switching rule sources to require minimal edits so that the solution stays easy to maintain over time.",
+      "acceptanceCriteria": [
+        "Adding a rule only requires editing the workflow and relevant documentation",
+        "Removing a rule does not require changing any complex generation logic",
+        "Switching an upstream URL does not require restructuring the repository",
+        "The PRD explicitly forbids expanding this solution into a complex rule generation system",
+        "Typecheck passes"
+      ],
+      "priority": 7,
+      "passes": false,
+      "notes": ""
+    }
+  ]
+}

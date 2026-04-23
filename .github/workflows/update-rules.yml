@@ -1,0 +1,48 @@
+name: Update Rules
+
+on:
+  workflow_dispatch:
+  schedule:
+    - cron: "15 2 * * *"
+
+permissions:
+  contents: write
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Create rules dir
+        run: mkdir -p rules
+
+      - name: Download clash-rules
+        run: |
+          curl -L --fail -o rules/private.txt https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/private.txt
+          curl -L --fail -o rules/reject.txt https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/reject.txt
+          curl -L --fail -o rules/direct.txt https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/direct.txt
+          curl -L --fail -o rules/proxy.txt https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/proxy.txt
+          curl -L --fail -o rules/lancidr.txt https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/lancidr.txt
+          curl -L --fail -o rules/cncidr.txt https://raw.githubusercontent.com/Loyalsoldier/clash-rules/release/cncidr.txt
+
+      - name: Download ios_rule_script
+        run: |
+          curl -L --fail -o rules/OpenAI.yaml https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/OpenAI/OpenAI.yaml
+          curl -L --fail -o rules/Anthropic.yaml https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Anthropic/Anthropic.yaml
+          curl -L --fail -o rules/Claude.yaml https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Claude/Claude.yaml
+          curl -L --fail -o rules/Copilot.yaml https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Copilot/Copilot.yaml
+          curl -L --fail -o rules/Telegram.yaml https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Telegram/Telegram.yaml
+          curl -L --fail -o rules/Netflix.yaml https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Netflix/Netflix.yaml
+          curl -L --fail -o rules/Disney.yaml https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Disney/Disney.yaml
+          curl -L --fail -o rules/Advertising.yaml https://raw.githubusercontent.com/blackmatrix7/ios_rule_script/release/rule/Clash/Advertising/Advertising.yaml
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add rules README.md
+          git diff --cached --quiet && exit 0
+          git commit -m "chore: update rules"
+          git push

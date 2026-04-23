@@ -1,0 +1,119 @@
+rule-providers:
+  private:
+    type: http
+    behavior: domain
+    path: ./ruleset/private.yaml
+    url: https://raw.githubusercontent.com/你的用户名/你的仓库名/main/rules/private.txt
+    interval: 86400
+
+  reject:
+    type: http
+    behavior: domain
+    path: ./ruleset/reject.yaml
+    url: https://raw.githubusercontent.com/你的用户名/你的仓库名/main/rules/reject.txt
+    interval: 86400
+
+  direct:
+    type: http
+    behavior: domain
+    path: ./ruleset/direct.yaml
+    url: https://raw.githubusercontent.com/你的用户名/你的仓库名/main/rules/direct.txt
+    interval: 86400
+
+  proxy:
+    type: http
+    behavior: domain
+    path: ./ruleset/proxy.yaml
+    url: https://raw.githubusercontent.com/你的用户名/你的仓库名/main/rules/proxy.txt
+    interval: 86400
+
+  lancidr:
+    type: http
+    behavior: ipcidr
+    path: ./ruleset/lancidr.yaml
+    url: https://raw.githubusercontent.com/你的用户名/你的仓库名/main/rules/lancidr.txt
+    interval: 86400
+
+  cncidr:
+    type: http
+    behavior: ipcidr
+    path: ./ruleset/cncidr.yaml
+    url: https://raw.githubusercontent.com/你的用户名/你的仓库名/main/rules/cncidr.txt
+    interval: 86400
+
+  OpenAI:
+    type: http
+    behavior: classical
+    path: ./ruleset/OpenAI.yaml
+    url: https://raw.githubusercontent.com/你的用户名/你的仓库名/main/rules/OpenAI.yaml
+    interval: 86400
+
+  Anthropic:
+    type: http
+    behavior: classical
+    path: ./ruleset/Anthropic.yaml
+    url: https://raw.githubusercontent.com/你的用户名/你的仓库名/main/rules/Anthropic.yaml
+    interval: 86400
+
+  Claude:
+    type: http
+    behavior: classical
+    path: ./ruleset/Claude.yaml
+    url: https://raw.githubusercontent.com/你的用户名/你的仓库名/main/rules/Claude.yaml
+    interval: 86400
+
+  Copilot:
+    type: http
+    behavior: classical
+    path: ./ruleset/Copilot.yaml
+    url: https://raw.githubusercontent.com/你的用户名/你的仓库名/main/rules/Copilot.yaml
+    interval: 86400
+
+  Telegram:
+    type: http
+    behavior: classical
+    path: ./ruleset/Telegram.yaml
+    url: https://raw.githubusercontent.com/你的用户名/你的仓库名/main/rules/Telegram.yaml
+    interval: 86400
+
+  Netflix:
+    type: http
+    behavior: classical
+    path: ./ruleset/Netflix.yaml
+    url: https://raw.githubusercontent.com/你的用户名/你的仓库名/main/rules/Netflix.yaml
+    interval: 86400
+
+  Disney:
+    type: http
+    behavior: classical
+    path: ./ruleset/Disney.yaml
+    url: https://raw.githubusercontent.com/你的用户名/你的仓库名/main/rules/Disney.yaml
+    interval: 86400
+
+  Advertising:
+    type: http
+    behavior: classical
+    path: ./ruleset/Advertising.yaml
+    url: https://raw.githubusercontent.com/你的用户名/你的仓库名/main/rules/Advertising.yaml
+    interval: 86400
+
+rules:
+  - RULE-SET,private,DIRECT
+  - RULE-SET,reject,REJECT
+  - RULE-SET,Advertising,REJECT
+
+  - RULE-SET,OpenAI,PROXY
+  - RULE-SET,Anthropic,PROXY
+  - RULE-SET,Claude,PROXY
+  - RULE-SET,Copilot,PROXY
+  - RULE-SET,Telegram,PROXY
+  - RULE-SET,Netflix,PROXY
+  - RULE-SET,Disney,PROXY
+
+  - RULE-SET,direct,DIRECT
+  - RULE-SET,proxy,PROXY
+  - RULE-SET,lancidr,DIRECT
+  - RULE-SET,cncidr,DIRECT
+  - GEOIP,LAN,DIRECT
+  - GEOIP,CN,DIRECT
+  - MATCH,PROXY
