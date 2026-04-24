@@ -74,7 +74,7 @@
 4. 手动运行一次 `Update Rules`
 5. 等待 `rules/` 目录生成同步后的规则文件
 6. 打开 `config/clash-verge-rules.example.yaml`
-7. 把其中所有 `你的用户名` 和 `你的仓库名` 改成你自己的值
+7. 本仓库当前远程示例已对应 `xrkorz/clash-verge-rules-sync-template`，如你 fork 或改名，再替换配置中的仓库地址
 8. 将该配置片段并入 Clash Verge 主配置
 
 ## Clash Verge 说明
